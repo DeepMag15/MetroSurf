@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Metro Surf - 3D Endless Runner</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="/src/assets/vite.svg" />
+  </head>
+  <body>
+    <!-- 3D Render Canvas Container -->
+    <div id="game-container"></div>
+
+    <!-- UI Overlay Wrapper -->
+    <div id="ui-container">
+      
+      <!-- MAIN MENU -->
+      <div id="main-menu" class="overlay-panel active">
+        <div class="menu-content">
+          <div class="brand">
+            <h1 class="game-title">METRO<span class="highlight">SURF</span></h1>
+            <p class="tagline">3D CYBER ENDLESS RUNNER</p>
+          </div>
+          
+          <div class="menu-actions">
+            <button id="btn-play" class="btn btn-primary btn-pulse">
+              <span class="btn-text">START RUN</span>
+              <span class="btn-glow"></span>
+            </button>
+            <button id="btn-missions" class="btn btn-secondary">
+              <span class="icon">🎯</span> MISSIONS
+            </button>
+            <button id="btn-leaderboard" class="btn btn-secondary">
+              <span class="icon">🏆</span> LEADERBOARD
+            </button>
+            <button id="btn-settings" class="btn btn-secondary">
+              <span class="icon">⚙️</span> SETTINGS
+            </button>
+          </div>
+
+          <!-- Bottom Status Summary -->
+          <div class="menu-footer">
+            <div class="footer-stat">
+              <span class="label">HIGH SCORE</span>
+              <span id="menu-high-score" class="value">0</span>
+            </div>
+            <div class="footer-stat">
+              <span class="label">TOTAL COINS</span>
+              <span id="menu-total-coins" class="value">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAUSE SCREEN -->
+      <div id="pause-screen" class="overlay-panel">
+        <div class="glass-card">
+          <h2>GAME PAUSED</h2>
+          <div class="paused-stats">
+            <div>
+              <p class="label">CURRENT SCORE</p>
+              <p id="pause-score" class="value">0</p>
+            </div>
+            <div>
+              <p class="label">COINS COLLECTED</p>
+              <p id="pause-coins" class="value">0</p>
+            </div>
+          </div>
+          <div class="menu-actions">
+            <button id="btn-resume" class="btn btn-primary">RESUME</button>
+            <button id="btn-restart" class="btn btn-secondary">RESTART</button>
+            <button id="btn-quit" class="btn btn-danger">QUIT TO MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- GAME OVER SCREEN -->
+      <div id="game-over-screen" class="overlay-panel">
+        <div class="glass-card game-over-card">
+          <div class="game-over-header">
+            <h1 class="text-danger">WASTED</h1>
+            <p class="sub-label" id="game-over-reason">You crashed into a subway train!</p>
+          </div>
+
+          <div class="game-over-stats">
+            <div class="stat-row">
+              <span>SCORE</span>
+              <span id="go-score" class="stat-value">0</span>
+            </div>
+            <div id="go-new-highscore" class="new-badge-container hidden">
+              <span class="badge badge-rainbow">NEW HIGH SCORE!</span>
+            </div>
+            <div class="stat-row">
+              <span>DISTANCE RUN</span>
+              <span id="go-distance" class="stat-value">0m</span>
+            </div>
+            <div class="stat-row">
+              <span>COINS COLLECTED</span>
+              <span id="go-coins" class="stat-value">0</span>
+            </div>
+            <div class="stat-row">
+              <span>MULTIPLIER</span>
+              <span id="go-multiplier" class="stat-value">x1</span>
+            </div>
+          </div>
+
+          <!-- Mission Progress Summary -->
+          <div class="go-missions">
+            <h3>MISSIONS PROGRESS</h3>
+            <div id="go-missions-list">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <div class="menu-actions">
+            <button id="btn-play-again" class="btn btn-primary btn-pulse">RUN AGAIN</button>
+            <button id="btn-go-menu" class="btn btn-secondary">MAIN MENU</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEADERBOARD PANEL -->
+      <div id="leaderboard-panel" class="overlay-panel">
+        <div class="glass-card panel-large">
+          <div class="panel-header">
+            <h2>🏆 LEADERBOARD</h2>
+            <button id="btn-close-leaderboard" class="btn-close">&times;</button>
+          </div>
+          <div class="table-container">
+            <table class="leaderboard-table">
+              <thead>
+                <tr>
+                  <th>RANK</th>
+                  <th>RUNNER</th>
+                  <th>SCORE</th>
+                  <th>COINS</th>
+                </tr>
+              </thead>
+              <tbody id="leaderboard-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+          <div class="panel-footer">
+            <button id="btn-reset-leaderboard" class="btn btn-danger-sm">Reset Highscores</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- MISSIONS PANEL -->
+      <div id="missions-panel" class="overlay-panel">
+        <div class="glass-card panel-large">
+          <div class="panel-header">
+            <h2>🎯 DAILY MISSIONS</h2>
+            <button id="btn-close-missions" class="btn-close">&times;</button>
+          </div>
+          <p class="mission-sub">Complete daily missions to earn high multipliers and coin boosts!</p>
+          <div class="missions-list-container" id="missions-list">
+            <!-- Dynamically populated -->
+          </div>
+          <div class="missions-multiplier-info">
+            <span class="mult-badge">x<span id="mission-base-mult">1</span></span>
+            <p>Your current permanent score multiplier based on completed missions.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS PANEL -->
+      <div id="settings-panel" class="overlay-panel">
+        <div class="glass-card">
+          <div class="panel-header">
+            <h2>⚙️ SETTINGS</h2>
+            <button id="btn-close-settings" class="btn-close">&times;</button>
+          </div>
+          <div class="setting-item">
+            <label for="setting-audio">Sound Effects</label>
+            <label class="switch">
+              <input type="checkbox" id="setting-audio" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <label for="setting-music">Synth Music</label>
+            <label class="switch">
+              <input type="checkbox" id="setting-music" checked>
+              <span class="slider round"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <label for="setting-quality">Graphics Quality</label>
+            <select id="setting-quality" class="styled-select">
+              <option value="high">High (Shadows & Lights)</option>
+              <option value="medium" selected>Medium (Standard Lights)</option>
+              <option value="low">Low (Fast Performance)</option>
+            </select>
+          </div>
+          <div class="setting-help">
+            <p><strong>Controls:</strong></p>
+            <ul>
+              <li><strong>Move Left/Right:</strong> Left/Right Arrows or A/D keys</li>
+              <li><strong>Jump:</strong> Up Arrow or W key</li>
+              <li><strong>Roll/Slide:</strong> Down Arrow or S key</li>
+              <li><strong>Pause:</strong> Esc or P key</li>
+              <li><strong>Mobile:</strong> Swipe in corresponding directions</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- IN-GAME HUD -->
+      <div id="game-hud" class="hud-overlay">
+        <!-- Top HUD Row -->
+        <div class="hud-row top-hud">
+          <div class="hud-left">
+            <div class="score-container">
+              <span class="score-val" id="hud-score">000000</span>
+              <span class="mult-val" id="hud-multiplier">x1</span>
+            </div>
+            <div class="coin-container">
+              <span class="coin-icon">🪙</span>
+              <span class="coin-val" id="hud-coins">0</span>
+            </div>
+          </div>
+          <div class="hud-right">
+            <button id="btn-hud-pause" class="hud-pause-btn">⏸</button>
+          </div>
+        </div>
+
+        <!-- HUD Center - Powerups & Active Progress Bars -->
+        <div class="hud-center">
+          <div id="powerup-timers" class="powerup-timers-container">
+            <!-- Dynamically populated progress bars for active powerups -->
+            <!-- e.g. Shield, Magnet, x2 Multiplier -->
+          </div>
+        </div>
+
+        <!-- HUD Bottom - Distance tracker and Mobile Instructions (fade out) -->
+        <div class="hud-row bottom-hud">
+          <div class="distance-container">
+            <span class="distance-val" id="hud-distance">0m</span>
+          </div>
+        </div>
+        
+        <!-- Touch zones overlay visual helper for mobile (shows briefly at start) -->
+        <div id="mobile-guide" class="mobile-swipe-guide">
+          <div class="swipe-arrow up">▲ Jump</div>
+          <div class="swipe-mid">
+            <div class="swipe-arrow left">◀ Left</div>
+            <div class="swipe-center">Swipe</div>
+            <div class="swipe-arrow right">Right ▶</div>
+          </div>
+          <div class="swipe-arrow down">▼ Roll</div>
+        </div>
+      </div>
+
+      <!-- IN-GAME MISSION COMPLETED FLOATER -->
+      <div id="mission-floater" class="mission-floater-alert">
+        <div class="floater-content">
+          <span class="floater-icon">🎯</span>
+          <div class="floater-text">
+            <p class="floater-title">MISSION COMPLETED!</p>
+            <p id="floater-mission-desc" class="floater-desc">Run 500 meters</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Core Javascript Entrypoint -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
