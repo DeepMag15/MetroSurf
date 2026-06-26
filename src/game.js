@@ -12,6 +12,7 @@ import audio from './audio.js';
 import input from './input.js';
 import missions from './missions.js';
 import leaderboard from './leaderboard.js';
+import gestureController from './gesture/GestureController.js';
 
 const STATE_MENU = 0;
 const STATE_PLAYING = 1;
@@ -64,6 +65,32 @@ class GameCoordinator {
     // Initialize inputs and wire callbacks
     input.init();
     this.setupInputCallbacks();
+
+    // Initialize hand gesture controllers
+    const videoElement = document.getElementById('webcam-video');
+    const canvasElement = document.getElementById('webcam-canvas');
+    gestureController.init({
+      videoElement,
+      canvasElement,
+      onLeft: () => {
+        if (this.state === STATE_PLAYING) player.moveLeft();
+      },
+      onRight: () => {
+        if (this.state === STATE_PLAYING) player.moveRight();
+      },
+      onJump: () => {
+        if (this.state === STATE_PLAYING) player.jump();
+      },
+      onRoll: () => {
+        if (this.state === STATE_PLAYING) player.roll();
+      },
+      onPause: () => {
+        if (this.state === STATE_PLAYING) this.pauseGame();
+      },
+      onResume: () => {
+        if (this.state === STATE_PAUSED) this.resumeGame();
+      }
+    }).catch(err => console.error('Failed to initialize gesture controls:', err));
 
     // Initialize local storage systems
     missions.init((completedMission) => this.showMissionFloater(completedMission));
@@ -156,6 +183,9 @@ class GameCoordinator {
 
     // Trigger audio music
     audio.startMusic();
+
+    // Clear gesture history and apply 1.5s startup cooldown to prevent false pauses/swipes
+    gestureController.resetState(1500);
   }
 
   pauseGame() {
@@ -176,6 +206,9 @@ class GameCoordinator {
     this.dom.pauseScreen.classList.remove('active');
     this.clock.getDelta(); // Clear time delta
     audio.startMusic();
+
+    // Clear gesture history and apply 1.0s resume cooldown to prevent false pauses/swipes
+    gestureController.resetState(1000);
   }
 
   quitToMenu() {

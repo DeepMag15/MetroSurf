@@ -170,42 +170,92 @@
 
       <!-- SETTINGS PANEL -->
       <div id="settings-panel" class="overlay-panel">
-        <div class="glass-card">
+        <div class="glass-card panel-large">
           <div class="panel-header">
             <h2>⚙️ SETTINGS</h2>
             <button id="btn-close-settings" class="btn-close">&times;</button>
           </div>
-          <div class="setting-item">
-            <label for="setting-audio">Sound Effects</label>
-            <label class="switch">
-              <input type="checkbox" id="setting-audio" checked>
-              <span class="slider round"></span>
-            </label>
+          <div class="panel-content-scrollable">
+            <div class="setting-item">
+              <label for="setting-audio">Sound Effects</label>
+              <label class="switch">
+                <input type="checkbox" id="setting-audio" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="setting-music">Synth Music</label>
+              <label class="switch">
+                <input type="checkbox" id="setting-music" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+            <div class="setting-item">
+              <label for="setting-quality">Graphics Quality</label>
+              <select id="setting-quality" class="styled-select">
+                <option value="high">High (Shadows & Lights)</option>
+                <option value="medium" selected>Medium (Standard Lights)</option>
+                <option value="low">Low (Fast Performance)</option>
+              </select>
+            </div>
+            
+            <!-- GESTURE CONTROLS SETTINGS SECTION -->
+            <div class="setting-section-title">HAND GESTURE CONTROLS</div>
+            
+            <div class="setting-item">
+              <label for="setting-gesture-enable">Enable Gesture Control</label>
+              <label class="switch">
+                <input type="checkbox" id="setting-gesture-enable">
+                <span class="slider round"></span>
+              </label>
+            </div>
+            
+            <div class="setting-item" id="row-gesture-preview">
+              <label for="setting-gesture-preview">Show Webcam Preview</label>
+              <label class="switch">
+                <input type="checkbox" id="setting-gesture-preview" checked>
+                <span class="slider round"></span>
+              </label>
+            </div>
+            
+            <div class="setting-item-slider">
+              <div class="slider-header">
+                <label for="setting-gesture-sensitivity">Gesture Sensitivity</label>
+                <span id="val-gesture-sensitivity">5</span>
+              </div>
+              <input type="range" id="setting-gesture-sensitivity" min="1" max="10" value="5" class="styled-range">
+            </div>
+            
+            <div class="setting-item-slider">
+              <div class="slider-header">
+                <label for="setting-gesture-cooldown">Cooldown (ms)</label>
+                <span id="val-gesture-cooldown">300ms</span>
+              </div>
+              <input type="range" id="setting-gesture-cooldown" min="100" max="1000" step="50" value="300" class="styled-range">
+            </div>
+            
+            <div class="setting-item-slider">
+              <div class="slider-header">
+                <label for="setting-gesture-confidence">Confidence Threshold</label>
+                <span id="val-gesture-confidence">0.80</span>
+              </div>
+              <input type="range" id="setting-gesture-confidence" min="0.5" max="0.95" step="0.05" value="0.80" class="styled-range">
+            </div>
+
+            <div class="setting-help">
+              <p><strong>Controls:</strong></p>
+              <ul>
+                <li><strong>Move Left/Right:</strong> Left/Right Arrows or A/D keys</li>
+                <li><strong>Jump:</strong> Up Arrow or W key</li>
+                <li><strong>Roll/Slide:</strong> Down Arrow or S key</li>
+                <li><strong>Pause:</strong> Esc or P key</li>
+                <li><strong>Mobile:</strong> Swipe in corresponding directions</li>
+                <li><strong>Gestures:</strong> Open Palm (Pause), Thumbs Up (Resume), Swipes (Left/Right/Up/Down to Move/Jump/Slide)</li>
+              </ul>
+            </div>
           </div>
-          <div class="setting-item">
-            <label for="setting-music">Synth Music</label>
-            <label class="switch">
-              <input type="checkbox" id="setting-music" checked>
-              <span class="slider round"></span>
-            </label>
-          </div>
-          <div class="setting-item">
-            <label for="setting-quality">Graphics Quality</label>
-            <select id="setting-quality" class="styled-select">
-              <option value="high">High (Shadows & Lights)</option>
-              <option value="medium" selected>Medium (Standard Lights)</option>
-              <option value="low">Low (Fast Performance)</option>
-            </select>
-          </div>
-          <div class="setting-help">
-            <p><strong>Controls:</strong></p>
-            <ul>
-              <li><strong>Move Left/Right:</strong> Left/Right Arrows or A/D keys</li>
-              <li><strong>Jump:</strong> Up Arrow or W key</li>
-              <li><strong>Roll/Slide:</strong> Down Arrow or S key</li>
-              <li><strong>Pause:</strong> Esc or P key</li>
-              <li><strong>Mobile:</strong> Swipe in corresponding directions</li>
-            </ul>
+          <div class="panel-footer" style="margin-top: 20px; display: flex; justify-content: center; width: 100%;">
+            <button id="btn-back-settings" class="btn btn-secondary" style="width: 100%; text-transform: uppercase;">Back to Main Menu</button>
           </div>
         </div>
       </div>
@@ -265,6 +315,13 @@
             <p id="floater-mission-desc" class="floater-desc">Run 500 meters</p>
           </div>
         </div>
+      </div>
+
+      <!-- WEBCAM PREVIEW CONTAINER -->
+      <div id="webcam-preview-container" class="webcam-preview-container hidden">
+        <video id="webcam-video" autoplay playsinline muted></video>
+        <canvas id="webcam-canvas" width="220" height="160"></canvas>
+        <button id="btn-toggle-webcam-visibility" class="btn-webcam-toggle" title="Toggle Webcam Overlay">👁️</button>
       </div>
 
     </div>

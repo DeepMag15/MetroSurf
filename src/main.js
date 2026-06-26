@@ -8,6 +8,7 @@ import audio from './audio.js';
 import renderer from './renderer.js';
 import missions from './missions.js';
 import leaderboard from './leaderboard.js';
+import gestureController from './gesture/GestureController.js';
 
 function setupApp() {
   // 1. Initialize the Core Game Coordinator
@@ -54,6 +55,10 @@ function setupApp() {
   });
 
   document.getElementById('btn-close-settings').addEventListener('click', () => {
+    settingsPanel.classList.remove('active');
+  });
+
+  document.getElementById('btn-back-settings').addEventListener('click', () => {
     settingsPanel.classList.remove('active');
   });
 
@@ -115,6 +120,76 @@ function setupApp() {
   audio.setSfxEnabled(sfxToggle.checked);
   audio.setMusicEnabled(musicToggle.checked);
   renderer.setQuality(qualitySelect.value);
+
+  // --- GESTURE CONTROLS SETTINGS WIREUP ---
+  const gestureEnable = document.getElementById('setting-gesture-enable');
+  const gesturePreview = document.getElementById('setting-gesture-preview');
+  const gestureSensitivity = document.getElementById('setting-gesture-sensitivity');
+  const gestureCooldown = document.getElementById('setting-gesture-cooldown');
+  const gestureConfidence = document.getElementById('setting-gesture-confidence');
+  
+  const valSensitivity = document.getElementById('val-gesture-sensitivity');
+  const valCooldown = document.getElementById('val-gesture-cooldown');
+  const valConfidence = document.getElementById('val-gesture-confidence');
+  
+  const rowGesturePreview = document.getElementById('row-gesture-preview');
+
+  function updateGesturePreviewRow() {
+    if (gestureEnable.checked) {
+      rowGesturePreview.style.display = 'flex';
+    } else {
+      rowGesturePreview.style.display = 'none';
+    }
+  }
+
+  gestureEnable.addEventListener('change', (e) => {
+    const isEnabled = e.target.checked;
+    gestureController.updateSettings({ isEnabled });
+    updateGesturePreviewRow();
+  });
+
+  gesturePreview.addEventListener('change', (e) => {
+    gestureController.updateSettings({ isPreviewVisible: e.target.checked });
+  });
+
+  gestureSensitivity.addEventListener('input', (e) => {
+    const val = e.target.value;
+    valSensitivity.innerText = val;
+    gestureController.updateSettings({ sensitivity: val });
+  });
+
+  gestureCooldown.addEventListener('input', (e) => {
+    const val = e.target.value;
+    valCooldown.innerText = `${val}ms`;
+    gestureController.updateSettings({ cooldown: val });
+  });
+
+  gestureConfidence.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value).toFixed(2);
+    valConfidence.innerText = val;
+    gestureController.updateSettings({ confidenceThreshold: val });
+  });
+
+  // Toggle button on the webcam feed itself
+  const toggleBtn = document.getElementById('btn-toggle-webcam-visibility');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const current = gesturePreview.checked;
+      gesturePreview.checked = !current;
+      gesturePreview.dispatchEvent(new Event('change'));
+    });
+  }
+
+  // Set initial settings based on controls
+  updateGesturePreviewRow();
+  gestureController.updateSettings({
+    isEnabled: gestureEnable.checked,
+    isPreviewVisible: gesturePreview.checked,
+    sensitivity: gestureSensitivity.value,
+    cooldown: gestureCooldown.value,
+    confidenceThreshold: gestureConfidence.value
+  });
 
   // --- RENDER HELPERS ---
 

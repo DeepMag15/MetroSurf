@@ -1065,3 +1065,197 @@ input:checked + .slider:before {
     font-size: 1rem;
   }
 }
+
+/* ==========================================
+   WEBCAM GESTURE CONTROL PREVIEW
+   ========================================== */
+.webcam-preview-container {
+  position: absolute;
+  top: 25px;
+  right: 80px; /* Offset to prevent overlapping the pause button */
+  width: 220px;
+  height: 160px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(10, 10, 18, 0.85);
+  border: 2px solid var(--color-neon-blue);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 
+              0 0 20px rgba(0, 240, 255, 0.25);
+  z-index: 100;
+  opacity: 0.8;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: auto; /* Enable hover/clicks */
+}
+
+.webcam-preview-container:hover {
+  opacity: 1;
+}
+
+.webcam-preview-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1); /* Horizontal mirroring */
+}
+
+.webcam-preview-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  transform: scaleX(-1); /* Align drawing with mirrored video */
+  pointer-events: none;
+}
+
+.btn-webcam-toggle {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(10, 10, 18, 0.8);
+  border: 1px solid var(--color-neon-blue);
+  color: var(--color-neon-blue);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  transition: all 0.2s ease-out;
+}
+
+.btn-webcam-toggle:hover {
+  background: var(--color-neon-blue);
+  color: #000;
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+  transform: scale(1.1);
+}
+
+.webcam-preview-container.hidden {
+  display: none !important;
+}
+
+/* ==========================================
+   GESTURE SETTINGS CONTROLS
+   ========================================== */
+.setting-section-title {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--color-neon-purple);
+  text-shadow: 0 0 8px rgba(189, 0, 255, 0.5);
+  margin-top: 30px;
+  margin-bottom: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+  text-align: left;
+}
+
+.setting-item-slider {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: left;
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.slider-header span {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--color-neon-blue);
+  text-shadow: 0 0 6px rgba(0, 240, 255, 0.4);
+}
+
+/* Custom Range Input */
+.styled-range {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  transition: background 0.2s;
+}
+
+.styled-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-neon-blue);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.styled-range::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.styled-range::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--color-neon-blue);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+  cursor: pointer;
+  border: none;
+  transition: transform 0.1s;
+}
+
+.styled-range::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Restrict panel height and enable flex for scrollable content */
+.panel-large, #settings-panel .glass-card {
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-content-scrollable {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 8px;
+  margin-bottom: 10px;
+}
+
+/* Custom Scrollbar styling for a consistent cyber aesthetic */
+.panel-content-scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.panel-content-scrollable::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 3px;
+}
+
+.panel-content-scrollable::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.3);
+  border-radius: 3px;
+}
+
+.panel-content-scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.6);
+}
+
